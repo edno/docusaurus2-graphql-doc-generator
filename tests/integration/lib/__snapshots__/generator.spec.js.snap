@@ -239,7 +239,7 @@ Object {
           "extension": ".mdx",
           "name": "tweets.mdx",
           "path": "output/queries/tweets.mdx",
-          "size": 459,
+          "size": 455,
           "type": "file",
         },
         Object {
@@ -259,7 +259,7 @@ Object {
       ],
       "name": "queries",
       "path": "output/queries",
-      "size": 1618,
+      "size": 1614,
       "type": "directory",
     },
     Object {
@@ -346,13 +346,13 @@ Object {
           "extension": ".mdx",
           "name": "notifications.mdx",
           "path": "output/subscriptions/notifications.mdx",
-          "size": 264,
+          "size": 260,
           "type": "file",
         },
       ],
       "name": "subscriptions",
       "path": "output/subscriptions",
-      "size": 287,
+      "size": 283,
       "type": "directory",
     },
     Object {
@@ -373,7 +373,7 @@ Object {
   ],
   "name": "output",
   "path": "output",
-  "size": 8863,
+  "size": 8855,
   "type": "directory",
 }
 `;

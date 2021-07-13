@@ -3,9 +3,10 @@ const {
   GraphQLUnionType,
   GraphQLScalarType,
   isListType,
-  GraphQLID,
+  GraphQLBoolean,
   GraphQLInt,
   GraphQLFloat,
+  GraphQLID,
   GraphQLString,
   GraphQLObjectType,
   GraphQLInterfaceType,
@@ -31,19 +32,44 @@ const SCHEMA_EXCLUDE_LIST_PATTERN =
   /^(?!Query$|Mutation$|Subscription$|__.+$).*$/;
 
 function getDefaultValue(argument) {
-  if (isListType(argument.type)) {
-    return `[${argument.defaultValue || ""}]`;
+  if (
+    argument.defaultValue === null ||
+    typeof argument.defaultValue === "undefined"
+  ) {
+    return undefined;
   }
 
-  switch (argument.type) {
-    case GraphQLID:
+  if (isListType(argument.type)) {
+    const defaultValues = Array.isArray(argument.defaultValue)
+      ? argument.defaultValue
+      : [argument.defaultValue];
+
+    const defaultValuesString = defaultValues
+      .map((defaultValue) => {
+        return printDefaultValue(argument.type.ofType, defaultValue);
+      })
+      .join(", ");
+
+    return `[${defaultValuesString}]`;
+  }
+
+  return printDefaultValue(argument.type, argument.defaultValue);
+}
+
+function printDefaultValue(type, value) {
+  if (isEnumType(type)) {
+    return value;
+  }
+
+  switch (type) {
     case GraphQLInt:
-      return `${argument.defaultValue || "0"}`;
     case GraphQLFloat:
-      return `${argument.defaultValue || "0.0"}`;
+    case GraphQLBoolean:
+      return value;
+    case GraphQLID:
     case GraphQLString:
     default:
-      return argument.defaultValue ? `"${argument.defaultValue}"` : undefined;
+      return `"${value}"`;
   }
 }
 

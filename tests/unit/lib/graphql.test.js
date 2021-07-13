@@ -39,7 +39,7 @@ describe("lib", () => {
     });
 
     describe("getDefaultValue()", () => {
-      test("returns default value as a string when defined", () => {
+      test("returns default value as an integer when defined", () => {
         const argument = {
           name: "foobar",
           description: undefined,
@@ -47,10 +47,21 @@ describe("lib", () => {
           defaultValue: 5,
           extensions: undefined,
         };
-        expect(getDefaultValue(argument)).toBe("5");
+        expect(getDefaultValue(argument)).toBe(5);
       });
 
-      test("returns '0' for type GraphQLInt if not default value defined", () => {
+      test("returns default value as a float when defined", () => {
+        const argument = {
+          name: "foobar",
+          description: undefined,
+          type: GraphQLFloat,
+          defaultValue: 5.3,
+          extensions: undefined,
+        };
+        expect(getDefaultValue(argument)).toBe(5.3);
+      });
+
+      test("returns undefined for type GraphQLInt if not default value defined", () => {
         const argument = {
           name: "foobar",
           description: undefined,
@@ -58,10 +69,10 @@ describe("lib", () => {
           defaultValue: undefined,
           extensions: undefined,
         };
-        expect(getDefaultValue(argument)).toBe("0");
+        expect(getDefaultValue(argument)).toBeUndefined();
       });
 
-      test("returns '0' for type GraphQLID if not default value defined", () => {
+      test("returns undefined for type GraphQLID if not default value defined", () => {
         const argument = {
           name: "foobar",
           description: undefined,
@@ -69,10 +80,10 @@ describe("lib", () => {
           defaultValue: undefined,
           extensions: undefined,
         };
-        expect(getDefaultValue(argument)).toBe("0");
+        expect(getDefaultValue(argument)).toBeUndefined();
       });
 
-      test("returns '0.0' for type GraphQLFloat if not default value defined", () => {
+      test("returns undefined for type GraphQLFloat if not default value defined", () => {
         const argument = {
           name: "foobar",
           description: undefined,
@@ -80,7 +91,7 @@ describe("lib", () => {
           defaultValue: undefined,
           extensions: undefined,
         };
-        expect(getDefaultValue(argument)).toBe("0.0");
+        expect(getDefaultValue(argument)).toBeUndefined();
       });
 
       test("returns undefined for type GraphQLString if not default value defined", () => {
@@ -94,7 +105,7 @@ describe("lib", () => {
         expect(getDefaultValue(argument)).toBeUndefined();
       });
 
-      test("returns '[]' for type GraphQLList without default value", () => {
+      test("returns undefined for type GraphQLList without default value", () => {
         const argument = {
           name: "id",
           description: undefined,
@@ -102,10 +113,10 @@ describe("lib", () => {
           defaultValue: undefined,
           extensions: undefined,
         };
-        expect(getDefaultValue(argument)).toBe("[]");
+        expect(getDefaultValue(argument)).toBeUndefined();
       });
 
-      test("returns array default value as string for type GraphQLList", () => {
+      test("returns array default value as string for type GraphQLList(GraphQLID)", () => {
         const argument = {
           name: "id",
           description: undefined,
@@ -113,7 +124,18 @@ describe("lib", () => {
           defaultValue: ["0", "1"],
           extensions: undefined,
         };
-        expect(getDefaultValue(argument)).toBe("[0,1]");
+        expect(getDefaultValue(argument)).toBe('["0", "1"]');
+      });
+
+      test("returns array default value as string for type GraphQLList(GraphQLInt)", () => {
+        const argument = {
+          name: "foobar",
+          description: undefined,
+          type: new GraphQLList(GraphQLInt),
+          defaultValue: [0, 1],
+          extensions: undefined,
+        };
+        expect(getDefaultValue(argument)).toBe("[0, 1]");
       });
     });
 
